@@ -15,6 +15,7 @@ namespace ToDo1.Controllers
             return View();
         }
 
+        [HttpPost]
         public IActionResult AddTask(TaskModel task)
         {
             return View();      
