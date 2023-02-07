@@ -4,6 +4,7 @@ namespace ToDo1.Models
 {
     public class TaskModel
     {
+        [Key]
         public int Id { get; set; }
 
         [Required]
@@ -15,7 +16,7 @@ namespace ToDo1.Models
 
         [Required]
         [DataType(DataType.Date)]
-        public DateOnly DueDate { get; set; }
+        public DateTime DueDate { get; set; }
 
     }
 }
