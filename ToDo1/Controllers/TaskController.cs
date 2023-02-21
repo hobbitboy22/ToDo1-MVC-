@@ -22,13 +22,13 @@ namespace ToDo1.Controllers
         }
 
         [HttpGet]
-        public IActionResult AddTask()
+        public IActionResult Add()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddTask(TaskModel task)
+        public async Task<IActionResult> Add(TaskModel task)
         {
             if (ModelState.IsValid)
             {
@@ -41,7 +41,7 @@ namespace ToDo1.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> EditTask(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
