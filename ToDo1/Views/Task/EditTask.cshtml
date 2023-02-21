@@ -1,15 +1,15 @@
 ﻿@model ToDo1.Models.TaskModel
 
 @{
-    ViewData["Title"] = "Edit Task";
+    ViewData["Title"] = "Add Task";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Edit Task</h1>
+    <h1 class="display-4">Add Task Page!</h1>
 </div>
 
 
-<form asp-action = "EditTask">
+<form asp-action = "AddTask">
     <div asp-validation-summary = "ModelOnly" class = "text-danger"></div>
         <div class = "form-group">
             <label asp-for = "Description" class = "control-label">Description</label>
@@ -22,7 +22,7 @@
             <span asp-validation-for = "DueDate" class = "text-danger"></span>
         </div>
         <div class = "form-group mt-4">
-            <input type = "submit" value = "AddTask" class = "btn btn-primary w-100" />
+            <input type = "submit" onclick = "return confirm('Are you sure?')" value = "Edit Task" class = "btn btn-primary w-100" />
         </div>
 </form>
 

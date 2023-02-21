@@ -12,7 +12,7 @@ namespace ToDo1.Models
         public string Description { get; set; }
 
         [Required]
-        public bool IsCompleted { get; set; }
+        public bool Completed { get; set; }
 
         [Required]
         [DataType(DataType.Date)]

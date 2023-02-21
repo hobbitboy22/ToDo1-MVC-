@@ -1,24 +1,87 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ToDo1.Models;
+using ToDo1.Data;
 
 namespace ToDo1.Controllers
 {
     public class TaskController : Controller
     {
-        public IActionResult Index()
+        private readonly AppDbContext _db;
+
+        public TaskController(AppDbContext db)
         {
-            return View();
+            _db = db;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var tasks = await _db.Tasks.ToListAsync();
+            return View(tasks);
+        }
+
+        [HttpGet]
         public IActionResult AddTask()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult AddTask(TaskModel task)
+        public async Task<IActionResult> AddTask(TaskModel task)
         {
-            return View();      
+            if (ModelState.IsValid)
+            {
+                var result = _db.Add(task);
+                await _db.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(task);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditTask(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var task = await _db.Tasks.FindAsync(id);
+
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            return View(task);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(TaskModel task)
+        {
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _db.Update(task);
+                    await _db.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+
+            return View();
         }
     }
 }
