@@ -81,7 +81,51 @@ namespace ToDo1.Controllers
                 }
             }
 
-            return View();
+            return View(task);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id == null) //Checks if the id is not null
+            {
+                return NotFound(); //If id == null, return notfound()
+            }
+
+            var task = await _db.Tasks.FindAsync(id); //Finds the task with the same id
+
+            if (task == null) //Checks if the task is not null
+            {
+                return NotFound(); //If task == null, return notfound()
+            }
+
+            _db.Tasks.Remove(task); //Removes the task from the database
+            await _db.SaveChangesAsync(); //Waits for the database to save the changes
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ToggleCompleted(int? completedId)
+        {
+            if (completedId == null)
+            {
+                return NotFound();
+            }
+
+            var task = await _db.Tasks.FindAsync(completedId);
+
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            task.Completed = !task.Completed;
+
+            await _db.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+
+        }
+            
     }
 }

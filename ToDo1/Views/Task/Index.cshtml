@@ -4,6 +4,8 @@
     ViewData["Title"] = "Task Page";
 }
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <div class="text-center">
     <h1 class="display-4">Tasks!</h1>
 
@@ -27,7 +29,17 @@
                     <td>@item.Completed</td>
                     <td>
                         <a asp-action = "Edit" asp-route-id = "@item.Id" class = "btn btn-primary">Edit</a>
-                        <a asp-action = "Delete" asp-route-id = "@item.Id" class = "btn btn-danger">Delete</a>
+
+                        <form method = "post" id = "delete-task-form" action = "@Url.Action("Delete", "Task")" class = "d-inline" >
+                            <input name = "id" type = "hidden" value = "@item.Id">
+                            <button class = "btn btn-danger" onclick = "ConfirmDelete();">Delete</button>
+                        </form>
+
+                        <form method = "post" id = "change-completed-form" action = "@Url.Action("ToggleCompleted", "Task")" class = "d-inline">
+                            <input name = "completedId" type = "hidden" value = "@item.Id">
+                            <button class = "btn btn-primary" onclick = "CompletedToggle();">Toggle Completed</button>
+                        </form>
+
                     </td>
 
                 </tr>
@@ -35,5 +47,44 @@
         </tbody>
 </table>
 </div>
+
+
+<script>
+
+    function ConfirmDelete(){
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("delete-task-form").submit();
+                )
+            }
+        })
+    }
+
+    function CompletedToggle(){
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("delete-task-form").submit();
+                )
+            }
+        })
+    }
+
+</script>
 
 
