@@ -8,7 +8,7 @@ namespace ToDo1.Controllers
     public class UserController: Controller
     {
         private readonly AppDbContext _db;
-        private readonly UserModel _user;
+        private UserModel _user;
         public UserController(AppDbContext db, UserModel user) //Dependency injection
         {
             _db = db;
@@ -78,14 +78,16 @@ namespace ToDo1.Controllers
 
             if (TempUser.Password.Equals(user.Password))
             {
-                //Redirect
+                _user = TempUser;
+                return RedirectToAction("Index", "Task");
             }
             else
             {
                 ModelState.AddModelError("Password", "Password is incorrect");
+                return View(user);
             }
 
-            return View(user);
+            return View();
         }
     }
 }
