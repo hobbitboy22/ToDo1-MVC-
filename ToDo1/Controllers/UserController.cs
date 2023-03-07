@@ -8,9 +8,11 @@ namespace ToDo1.Controllers
     public class UserController: Controller
     {
         private readonly AppDbContext _db;
-        public UserController(AppDbContext db)
+        private readonly UserModel _user;
+        public UserController(AppDbContext db, UserModel user) //Dependency injection
         {
             _db = db;
+            _user = user;
         }
 
         [HttpGet]
@@ -41,6 +43,46 @@ namespace ToDo1.Controllers
                 _db.Users.Add(user);
                 await _db.SaveChangesAsync();
                 return RedirectToAction(nameof(Login));
+            }
+
+            return View(user);
+        }
+
+        [HttpPost]
+        public IActionResult Login(UserModel user)
+        {
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if (user.Email == null)
+            {
+                ModelState.AddModelError("Email", "Email not given");
+                return View(user);
+            }
+
+            if (user.Password == null)
+            {
+                ModelState.AddModelError("Password", "Password not given");
+                return View(user);
+            }
+
+            UserModel TempUser = _db.Users.FirstOrDefault(m => user.Email == m.Email);
+
+            if (TempUser == null)
+            {
+                ModelState.AddModelError("Email", "Email not found");
+                return View(user);
+            }
+
+            if (TempUser.Password.Equals(user.Password))
+            {
+                //Redirect
+            }
+            else
+            {
+                ModelState.AddModelError("Password", "Password is incorrect");
             }
 
             return View(user);
